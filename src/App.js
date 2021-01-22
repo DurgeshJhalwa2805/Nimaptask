@@ -1,24 +1,33 @@
-import logo from './logo.svg';
+import React,{ Fragment, useState } from "react";
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 import './App.css';
+import Signin from "./components/auth/Signin";
+import Home from "./components/Home";
+import Task from "./components/Task";
+import User from "./components/User";
 
 function App() {
+
+  //authentication check creating
+  const [isAuthenticated,setAuthentication] = useState(false)
+
+    // new user gets create
+  const [user ,setNewUser]=useState({
+    username:"",
+    password:""
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+    <Router>
+    <Switch>
+    <Route exact path="/login"><Signin  setNewUser={setNewUser} setAuthentication={setAuthentication} history={useHistory} /></Route>
+    <Route exact path="/"><Home history={useHistory} isAuthenticated={isAuthenticated} /></Route>
+    <Route exact path="/task"><Task isAuthenticated={isAuthenticated} history={useHistory} /></Route>
+    <Route exact path="/user"><User  user={user} history={useHistory} isAuthenticated={isAuthenticated} logout={setAuthentication} changePassword={setNewUser} /></Route>
+    </Switch>
+    </Router>
+    </Fragment>
   );
 }
 
